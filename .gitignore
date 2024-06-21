@@ -3,7 +3,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
-**pom.xml
+**pom.xml**
+!pom.xml
 
 ### IntelliJ IDEA ###
 .idea
