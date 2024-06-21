@@ -3,7 +3,6 @@ package io.thiagofsaoliveira;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import io.thiagofsaoliveira.discord.Messages;
 import io.thiagofsaoliveira.discord.PingCommandListener;
 import io.thiagofsaoliveira.discord.ReadyListener;
 import net.dv8tion.jda.api.JDA;

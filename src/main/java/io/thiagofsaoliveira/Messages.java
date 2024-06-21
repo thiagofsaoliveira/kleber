@@ -1,4 +1,4 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira;
 
 import java.util.ResourceBundle;
 
