@@ -86,7 +86,15 @@
                                 <mkdir dir="${app.output-dir}" />
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${app.output-dir}" />
                                 <copy file="${basedir}/.env.example" todir="${app.output-dir}" />
+                                <copy todir="${app.output-dir}">
+                                    <fileset dir="${basedir}/scripts" includes="run.*" />
+                                </copy>
                                 <move file="${app.output-dir}/.env.example" tofile="${app.output-dir}/.env"/>
+                                <zip destfile="${app.output-dir}.zip">
+                                    <zipfileset dir="${app.output-dir}" excludes="*.sh" />
+                                    <zipfileset filemode="755" dir="${app.output-dir}" includes="*.sh" />
+                                </zip>
+                                <delete dir="${app.output-dir}"/>
                                 </target>
                         </configuration>
                         <goals>
