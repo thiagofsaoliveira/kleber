@@ -16,6 +16,10 @@ public class Messages {
         return messages().getString(key);
     }
 
+    public String getMessageFormatted(String key, Object... args) {
+        return messages().getString(key).formatted(args);
+    }
+
     private ResourceBundle messages() {
         return ResourceBundle.getBundle("messages");
     }

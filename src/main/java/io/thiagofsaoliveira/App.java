@@ -3,6 +3,7 @@ package io.thiagofsaoliveira;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import io.thiagofsaoliveira.discord.HelloCommandListener;
 import io.thiagofsaoliveira.discord.PingCommandListener;
 import io.thiagofsaoliveira.discord.ReadyListener;
 import net.dv8tion.jda.api.JDA;
@@ -30,7 +31,8 @@ public class App {
 
         Object[] discordListeners = {
                 new ReadyListener(),
-                new PingCommandListener()
+                new PingCommandListener(),
+                new HelloCommandListener(messages)
         };
 
         JDA jda = JDABuilder.createDefault(config.getToken())
@@ -39,9 +41,11 @@ public class App {
                 .build();
 
         String pingDescription = messages.getMessage("PING_DESCRIPTION_MSG");
+        String helloDescription = messages.getMessage("HELLO_DESCRIPTION_MSG");
 
         Collection<SlashCommandData> commands = List.of(
-                Commands.slash("ping", pingDescription).setGuildOnly(true)
+                Commands.slash("ping", pingDescription).setGuildOnly(true),
+                Commands.slash("hello", helloDescription).setGuildOnly(true)
         );
 
         jda.updateCommands().addCommands(commands).queue();
