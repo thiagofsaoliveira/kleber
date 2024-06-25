@@ -73,7 +73,7 @@ public class App {
         jda.updateCommands().addCommands(commands).queue();
 
         Collection<AudioEventListener> audioListeners = List.of(
-                new AudioStoppedListener(jda, requestsManager));
+                new AudioStoppedListener(jda, requestsManager, audioManager));
 
         audioManager.addEventListeners(audioListeners);
     }
