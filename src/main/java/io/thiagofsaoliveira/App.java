@@ -7,6 +7,7 @@ import io.thiagofsaoliveira.audio.AudioEventListener;
 import io.thiagofsaoliveira.audio.AudioPlayerManager;
 import io.thiagofsaoliveira.audio.AudioStartedListener;
 import io.thiagofsaoliveira.audio.AudioStoppedListener;
+import io.thiagofsaoliveira.discord.CommandAutoCompleteListener;
 import io.thiagofsaoliveira.discord.GuildJoinListener;
 import io.thiagofsaoliveira.discord.HelloCommandListener;
 import io.thiagofsaoliveira.discord.PingCommandListener;
@@ -43,6 +44,7 @@ public class App {
                 new GuildJoinListener(audioManager),
                 new PingCommandListener(),
                 new HelloCommandListener(messages),
+                new CommandAutoCompleteListener(audioManager, messages),
                 new PlayCommandListener(
                         audioManager,
                         requestsManager,
@@ -67,6 +69,7 @@ public class App {
                                 OptionType.STRING,
                                 "query",
                                 queryDescription,
+                                true,
                                 true)
                         .setGuildOnly(true)
         );
