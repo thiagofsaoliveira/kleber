@@ -19,6 +19,7 @@ import io.thiagofsaoliveira.discord.ReadyListener;
 import io.thiagofsaoliveira.discord.SkipCommandListener;
 import io.thiagofsaoliveira.discord.StopCommandListener;
 import io.thiagofsaoliveira.discord.TogglePauseCommandListener;
+import io.thiagofsaoliveira.spotify.SpotifyManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -42,7 +43,9 @@ public class App {
         log.setLevel(Level.toLevel(logLevel));
 
         var messages = Messages.newMessages();
-        var audioManager = AudioPlayerManager.newAudioPlayerManager();
+        var spotifyManager = SpotifyManager.newSpotifyManager(config);
+        var audioManager =
+                AudioPlayerManager.newAudioPlayerManager(spotifyManager);
         var requestsManager = AudioRequestsManager.newAudioRequestsManager();
 
         Object[] discordListeners = {

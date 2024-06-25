@@ -2,10 +2,14 @@ package io.thiagofsaoliveira.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
+import io.thiagofsaoliveira.spotify.AudioTrackData;
+import io.thiagofsaoliveira.spotify.SpotifyException;
+import io.thiagofsaoliveira.spotify.SpotifyManager;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -13,27 +17,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AudioPlayerManager {
 
+    private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile(
+            "https://open\\.spotify\\.com/(intl-[a-zA-Z]{2}/)?track/(.*)");
+
     private final com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager lavaplayerManager;
+    private final SpotifyManager spotifyManager;
     private final ConcurrentMap<Long, AudioPlayer> audioPlayers =
             new ConcurrentHashMap<>();
     private final Collection<AudioEventListener> listeners = new ArrayList<>();
 
     public AudioPlayerManager(
-            com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager lavaplayerManager) {
+            com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager lavaplayerManager,
+            SpotifyManager spotifyManager) {
         this.lavaplayerManager = lavaplayerManager;
+        this.spotifyManager = spotifyManager;
     }
 
-    public static AudioPlayerManager newAudioPlayerManager() {
+    public static AudioPlayerManager newAudioPlayerManager(
+            SpotifyManager spotifyManager) {
         var manager = new DefaultAudioPlayerManager();
         manager.registerSourceManager(new YoutubeAudioSourceManager(
                 true,
                 new MusicWithThumbnail(),
                 new WebWithThumbnail(),
                 new AndroidWithThumbnail()));
-        return new AudioPlayerManager(manager);
+        return new AudioPlayerManager(manager, spotifyManager);
     }
 
     public boolean containsAudioPlayer(long id) {
@@ -61,13 +74,30 @@ public class AudioPlayerManager {
             Object orderingKey,
             String query,
             AudioLoadResultHandler handler) {
-        String identifier = parseIdentifier(query);
-        lavaplayerManager.loadItemOrdered(orderingKey, identifier, handler);
+        try {
+            String identifier = parseIdentifier(query);
+            lavaplayerManager.loadItemOrdered(orderingKey, identifier, handler);
+        } catch (SpotifyException e) {
+            handler.loadFailed(new FriendlyException(
+                    "Error parsing identifier: " + query,
+                    FriendlyException.Severity.COMMON,
+                    e));
+        }
     }
 
     private String parseIdentifier(String identifier) {
         try {
             URI.create(identifier).toURL();
+            Matcher matcher = SPOTIFY_URL_PATTERN.matcher(identifier);
+
+            if (matcher.matches()) {
+                String id = matcher.group(2);
+                AudioTrackData data = spotifyManager.getDataFor(id);
+                return "ytsearch:%s %s lyrics".formatted(
+                        data.track(),
+                        data.author());
+            }
+
             return identifier;
         } catch (IllegalArgumentException | MalformedURLException e) {
             return "ytsearch:" + identifier;
