@@ -4,7 +4,9 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import io.thiagofsaoliveira.audio.AudioEventListener;
+import io.thiagofsaoliveira.audio.AudioPausedListener;
 import io.thiagofsaoliveira.audio.AudioPlayerManager;
+import io.thiagofsaoliveira.audio.AudioResumedListener;
 import io.thiagofsaoliveira.audio.AudioStartedListener;
 import io.thiagofsaoliveira.audio.AudioStoppedListener;
 import io.thiagofsaoliveira.discord.CommandAutoCompleteListener;
@@ -13,6 +15,7 @@ import io.thiagofsaoliveira.discord.HelloCommandListener;
 import io.thiagofsaoliveira.discord.PingCommandListener;
 import io.thiagofsaoliveira.discord.PlayCommandListener;
 import io.thiagofsaoliveira.discord.ReadyListener;
+import io.thiagofsaoliveira.discord.TogglePauseCommandListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -49,6 +52,10 @@ public class App {
                         audioManager,
                         requestsManager,
                         messages),
+                new TogglePauseCommandListener(
+                        audioManager,
+                        requestsManager,
+                        messages)
         };
 
         JDA jda = JDABuilder.createDefault(config.getToken())
@@ -60,6 +67,8 @@ public class App {
         String helloDescription = messages.getMessage("HELLO_DESCRIPTION_MSG");
         String playDescription = messages.getMessage("PLAY_DESCRIPTION_MSG");
         String queryDescription = messages.getMessage("QUERY_DESCRIPTION_MSG");
+        String togglePauseDescription =
+                messages.getMessage("TOGGLE_PAUSE_DESCRIPTION_MSG");
 
         Collection<SlashCommandData> commands = List.of(
                 Commands.slash("ping", pingDescription).setGuildOnly(true),
@@ -71,6 +80,8 @@ public class App {
                                 queryDescription,
                                 true,
                                 true)
+                        .setGuildOnly(true),
+                Commands.slash("togglepause", togglePauseDescription)
                         .setGuildOnly(true)
         );
 
@@ -78,7 +89,9 @@ public class App {
 
         Collection<AudioEventListener> audioListeners = List.of(
                 new AudioStartedListener(jda, requestsManager, messages),
-                new AudioStoppedListener(jda, requestsManager, audioManager));
+                new AudioStoppedListener(jda, requestsManager, audioManager),
+                new AudioPausedListener(jda, requestsManager, messages),
+                new AudioResumedListener(jda, requestsManager, messages));
 
         audioManager.addEventListeners(audioListeners);
     }

@@ -35,6 +35,12 @@ public class AudioPlayer implements
         lavaplayer.startTrack(audioTrack, false);
     }
 
+    public void pause() {
+        if (isPlaying()) {
+            lavaplayer.setPaused(!lavaplayer.isPaused());
+        }
+    }
+
     public void addListeners(Collection<AudioEventListener> listeners) {
         this.listeners.addAll(listeners);
     }
