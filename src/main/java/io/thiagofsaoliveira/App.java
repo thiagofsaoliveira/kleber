@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import io.thiagofsaoliveira.audio.AudioEventListener;
 import io.thiagofsaoliveira.audio.AudioPlayerManager;
+import io.thiagofsaoliveira.audio.AudioStartedListener;
 import io.thiagofsaoliveira.audio.AudioStoppedListener;
 import io.thiagofsaoliveira.discord.GuildJoinListener;
 import io.thiagofsaoliveira.discord.HelloCommandListener;
@@ -73,6 +74,7 @@ public class App {
         jda.updateCommands().addCommands(commands).queue();
 
         Collection<AudioEventListener> audioListeners = List.of(
+                new AudioStartedListener(jda, requestsManager, messages),
                 new AudioStoppedListener(jda, requestsManager, audioManager));
 
         audioManager.addEventListeners(audioListeners);
