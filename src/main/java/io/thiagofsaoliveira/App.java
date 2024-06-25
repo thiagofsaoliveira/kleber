@@ -14,6 +14,7 @@ import io.thiagofsaoliveira.discord.GuildJoinListener;
 import io.thiagofsaoliveira.discord.HelloCommandListener;
 import io.thiagofsaoliveira.discord.PingCommandListener;
 import io.thiagofsaoliveira.discord.PlayCommandListener;
+import io.thiagofsaoliveira.discord.QueueCommandListener;
 import io.thiagofsaoliveira.discord.ReadyListener;
 import io.thiagofsaoliveira.discord.SkipCommandListener;
 import io.thiagofsaoliveira.discord.StopCommandListener;
@@ -65,7 +66,8 @@ public class App {
                 new StopCommandListener(
                         audioManager,
                         requestsManager,
-                        messages)
+                        messages),
+                new QueueCommandListener(requestsManager, messages)
         };
 
         JDA jda = JDABuilder.createDefault(config.getToken())
@@ -81,6 +83,8 @@ public class App {
                 messages.getMessage("TOGGLE_PAUSE_DESCRIPTION_MSG");
         String skipDescription = messages.getMessage("SKIP_DESCRIPTION_MSG");
         String stopDescription = messages.getMessage("STOP_DESCRIPTION_MSG");
+        String queueDescription = messages.getMessage("QUEUE_DESCRIPTION_MSG");
+        String pageDescription = messages.getMessage("PAGE_DESCRIPTION_MSG");
 
         Collection<SlashCommandData> commands = List.of(
                 Commands.slash("ping", pingDescription).setGuildOnly(true),
@@ -96,7 +100,14 @@ public class App {
                 Commands.slash("togglepause", togglePauseDescription)
                         .setGuildOnly(true),
                 Commands.slash("skip", skipDescription).setGuildOnly(true),
-                Commands.slash("stop", stopDescription).setGuildOnly(true)
+                Commands.slash("stop", stopDescription).setGuildOnly(true),
+                Commands.slash("queue", queueDescription)
+                        .addOption(
+                                OptionType.INTEGER,
+                                "page",
+                                pageDescription,
+                                false)
+                        .setGuildOnly(true)
         );
 
         jda.updateCommands().addCommands(commands).queue();
