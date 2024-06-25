@@ -26,4 +26,12 @@ public class Configuration {
     public String getLogLevel() {
         return dotenv.get("LOG_LEVEL");
     }
+
+    public String getClientId() {
+        return dotenv.get("CLIENT_ID");
+    }
+
+    public String getClientSecret() {
+        return dotenv.get("CLIENT_SECRET");
+    }
 }
