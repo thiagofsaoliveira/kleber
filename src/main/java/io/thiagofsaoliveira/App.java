@@ -15,6 +15,7 @@ import io.thiagofsaoliveira.discord.HelloCommandListener;
 import io.thiagofsaoliveira.discord.PingCommandListener;
 import io.thiagofsaoliveira.discord.PlayCommandListener;
 import io.thiagofsaoliveira.discord.ReadyListener;
+import io.thiagofsaoliveira.discord.SkipCommandListener;
 import io.thiagofsaoliveira.discord.TogglePauseCommandListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -55,6 +56,10 @@ public class App {
                 new TogglePauseCommandListener(
                         audioManager,
                         requestsManager,
+                        messages),
+                new SkipCommandListener(
+                        audioManager,
+                        requestsManager,
                         messages)
         };
 
@@ -69,6 +74,7 @@ public class App {
         String queryDescription = messages.getMessage("QUERY_DESCRIPTION_MSG");
         String togglePauseDescription =
                 messages.getMessage("TOGGLE_PAUSE_DESCRIPTION_MSG");
+        String skipDescription = messages.getMessage("SKIP_DESCRIPTION_MSG");
 
         Collection<SlashCommandData> commands = List.of(
                 Commands.slash("ping", pingDescription).setGuildOnly(true),
@@ -82,7 +88,8 @@ public class App {
                                 true)
                         .setGuildOnly(true),
                 Commands.slash("togglepause", togglePauseDescription)
-                        .setGuildOnly(true)
+                        .setGuildOnly(true),
+                Commands.slash("skip", skipDescription).setGuildOnly(true)
         );
 
         jda.updateCommands().addCommands(commands).queue();

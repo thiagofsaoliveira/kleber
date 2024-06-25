@@ -41,6 +41,10 @@ public class AudioPlayer implements
         }
     }
 
+    public void stop() {
+        lavaplayer.stopTrack();
+    }
+
     public void addListeners(Collection<AudioEventListener> listeners) {
         this.listeners.addAll(listeners);
     }
