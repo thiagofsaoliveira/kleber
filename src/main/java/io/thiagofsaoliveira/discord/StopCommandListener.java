@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +76,9 @@ public class StopCommandListener implements EventListener {
     }
 
     private boolean isStopCommandEvent(IReplyCallback event) {
-        return event instanceof SlashCommandInteractionEvent slashInteraction
-                && slashInteraction.getName().equals("stop");
+        return (event instanceof SlashCommandInteractionEvent slashInteraction
+                && slashInteraction.getName().equals("stop"))
+                || (event instanceof ButtonInteractionEvent buttonInteraction
+                && buttonInteraction.getComponentId().equals("stop"));
     }
 }

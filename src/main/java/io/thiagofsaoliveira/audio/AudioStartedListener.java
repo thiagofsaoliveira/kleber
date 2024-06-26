@@ -13,11 +13,16 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -56,11 +61,14 @@ public class AudioStartedListener implements AudioEventListener {
                 AudioTrackInfo info = track.getInfo();
                 appendHeader(builder, guild, info);
                 appendFooter(builder, req, guild);
+                Collection<ItemComponent> buttons = buildButtons();
 
                 long textChannelId = req.getTextChannelId();
                 TextChannel channel = Objects.requireNonNull(
                         guild.getTextChannelById(textChannelId));
-                channel.sendMessageEmbeds(builder.build()).queue();
+                channel.sendMessageEmbeds(builder.build())
+                        .addActionRow(buttons)
+                        .queue();
             });
         }
     }
@@ -120,5 +128,12 @@ public class AudioStartedListener implements AudioEventListener {
                 "REQUESTER_FOOTER_FORMAT",
                 requesterName);
         builder.setFooter(footer, requesterAvatar);
+    }
+
+    private Collection<ItemComponent> buildButtons() {
+        return List.of(
+                Button.secondary("togglepause", Emoji.fromUnicode("⏯️")),
+                Button.secondary("skip", Emoji.fromUnicode("⏭️")),
+                Button.secondary("stop", Emoji.fromUnicode("⏹️")));
     }
 }
