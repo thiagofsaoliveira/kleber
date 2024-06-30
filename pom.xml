@@ -6,7 +6,7 @@
 
     <groupId>io.thiagofsaoliveira</groupId>
     <artifactId>kleber</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
