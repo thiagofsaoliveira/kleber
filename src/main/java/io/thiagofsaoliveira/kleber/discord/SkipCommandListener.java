@@ -1,11 +1,11 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira.kleber.discord;
 
-import io.thiagofsaoliveira.AudioRequest;
-import io.thiagofsaoliveira.AudioRequests;
-import io.thiagofsaoliveira.AudioRequestsManager;
-import io.thiagofsaoliveira.Messages;
-import io.thiagofsaoliveira.audio.AudioPlayer;
-import io.thiagofsaoliveira.audio.AudioPlayerManager;
+import io.thiagofsaoliveira.kleber.AudioRequest;
+import io.thiagofsaoliveira.kleber.AudioRequests;
+import io.thiagofsaoliveira.kleber.AudioRequestsManager;
+import io.thiagofsaoliveira.kleber.Messages;
+import io.thiagofsaoliveira.kleber.audio.AudioPlayer;
+import io.thiagofsaoliveira.kleber.audio.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -21,16 +21,16 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Optional;
 
-public class StopCommandListener implements EventListener {
+public class SkipCommandListener implements EventListener {
 
     private static final Logger log =
-            LoggerFactory.getLogger(StopCommandListener.class);
+            LoggerFactory.getLogger(SkipCommandListener.class);
 
     private final AudioPlayerManager audioManager;
     private final AudioRequestsManager requestsManager;
     private final Messages messages;
 
-    public StopCommandListener(
+    public SkipCommandListener(
             AudioPlayerManager audioManager,
             AudioRequestsManager requestsManager,
             Messages messages) {
@@ -41,10 +41,10 @@ public class StopCommandListener implements EventListener {
 
     @Override
     public void onEvent(@NotNull GenericEvent event) {
-        if (event instanceof IReplyCallback e && isStopCommandEvent(e)) {
+        if (event instanceof IReplyCallback e && isSkipCommandEvent(e)) {
             Guild guild = Objects.requireNonNull(e.getGuild());
             long guildId = guild.getIdLong();
-            log.debug("StopCommandEvent received for guild: {}", guildId);
+            log.debug("SkipCommandEvent received for guild: {}", guildId);
 
             Member member = Objects.requireNonNull(e.getMember());
             GuildVoiceState voiceState =
@@ -67,18 +67,17 @@ public class StopCommandListener implements EventListener {
             AudioRequests requests = requestsManager.getAudioRequests(guildId);
             Optional<AudioRequest> request = requests.getCurrentRequest();
             request.ifPresent(req -> {
-                String msg = messages.getMessage("STOPPED_MSG");
+                String msg = messages.getMessage("SKIPPED_MSG");
                 e.reply(msg).queue();
-                requests.clear();
                 audioPlayer.stop();
             });
         }
     }
 
-    private boolean isStopCommandEvent(IReplyCallback event) {
+    private boolean isSkipCommandEvent(IReplyCallback event) {
         return (event instanceof SlashCommandInteractionEvent slashInteraction
-                && slashInteraction.getName().equals("stop"))
+                && slashInteraction.getName().equals("skip"))
                 || (event instanceof ButtonInteractionEvent buttonInteraction
-                && buttonInteraction.getComponentId().equals("stop"));
+                && buttonInteraction.getComponentId().equals("skip"));
     }
 }

@@ -1,4 +1,4 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira.kleber.discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;

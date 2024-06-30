@@ -1,4 +1,4 @@
-package io.thiagofsaoliveira;
+package io.thiagofsaoliveira.kleber;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 

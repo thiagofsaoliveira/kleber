@@ -1,4 +1,4 @@
-package io.thiagofsaoliveira;
+package io.thiagofsaoliveira.kleber;
 
 import java.util.ResourceBundle;
 

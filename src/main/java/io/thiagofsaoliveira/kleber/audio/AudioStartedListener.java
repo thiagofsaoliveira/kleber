@@ -1,13 +1,13 @@
-package io.thiagofsaoliveira.audio;
+package io.thiagofsaoliveira.kleber.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackStartEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import io.thiagofsaoliveira.AudioRequest;
-import io.thiagofsaoliveira.AudioRequests;
-import io.thiagofsaoliveira.AudioRequestsManager;
-import io.thiagofsaoliveira.Messages;
+import io.thiagofsaoliveira.kleber.AudioRequest;
+import io.thiagofsaoliveira.kleber.AudioRequests;
+import io.thiagofsaoliveira.kleber.AudioRequestsManager;
+import io.thiagofsaoliveira.kleber.Messages;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;

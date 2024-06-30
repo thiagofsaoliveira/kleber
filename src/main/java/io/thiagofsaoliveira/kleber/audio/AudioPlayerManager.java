@@ -1,4 +1,4 @@
-package io.thiagofsaoliveira.audio;
+package io.thiagofsaoliveira.kleber.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -7,9 +7,9 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
-import io.thiagofsaoliveira.spotify.AudioTrackData;
-import io.thiagofsaoliveira.spotify.SpotifyException;
-import io.thiagofsaoliveira.spotify.SpotifyManager;
+import io.thiagofsaoliveira.kleber.spotify.AudioTrackData;
+import io.thiagofsaoliveira.kleber.spotify.SpotifyException;
+import io.thiagofsaoliveira.kleber.spotify.SpotifyManager;
 
 import java.net.MalformedURLException;
 import java.net.URI;

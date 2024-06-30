@@ -1,9 +1,9 @@
-package io.thiagofsaoliveira.spotify;
+package io.thiagofsaoliveira.kleber.spotify;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.thiagofsaoliveira.Configuration;
+import io.thiagofsaoliveira.kleber.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

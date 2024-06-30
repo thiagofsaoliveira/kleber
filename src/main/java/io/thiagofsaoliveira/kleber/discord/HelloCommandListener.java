@@ -1,6 +1,6 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira.kleber.discord;
 
-import io.thiagofsaoliveira.Messages;
+import io.thiagofsaoliveira.kleber.Messages;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.GenericEvent;

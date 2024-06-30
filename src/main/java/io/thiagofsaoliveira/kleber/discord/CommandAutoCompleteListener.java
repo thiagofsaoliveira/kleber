@@ -1,12 +1,12 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira.kleber.discord;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import io.thiagofsaoliveira.Messages;
-import io.thiagofsaoliveira.audio.AudioPlayerManager;
+import io.thiagofsaoliveira.kleber.Messages;
+import io.thiagofsaoliveira.kleber.audio.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;

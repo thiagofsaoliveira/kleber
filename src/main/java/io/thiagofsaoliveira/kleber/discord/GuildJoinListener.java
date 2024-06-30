@@ -1,7 +1,7 @@
-package io.thiagofsaoliveira.discord;
+package io.thiagofsaoliveira.kleber.discord;
 
-import io.thiagofsaoliveira.audio.AudioPlayer;
-import io.thiagofsaoliveira.audio.AudioPlayerManager;
+import io.thiagofsaoliveira.kleber.audio.AudioPlayer;
+import io.thiagofsaoliveira.kleber.audio.AudioPlayerManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
