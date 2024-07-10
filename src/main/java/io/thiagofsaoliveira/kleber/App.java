@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import io.thiagofsaoliveira.kleber.audio.AudioEventListener;
+import io.thiagofsaoliveira.kleber.audio.AudioFailedListener;
 import io.thiagofsaoliveira.kleber.audio.AudioPausedListener;
 import io.thiagofsaoliveira.kleber.audio.AudioPlayerManager;
 import io.thiagofsaoliveira.kleber.audio.AudioResumedListener;
@@ -119,7 +120,8 @@ public class App {
                 new AudioStartedListener(jda, requestsManager, messages),
                 new AudioStoppedListener(jda, requestsManager, audioManager),
                 new AudioPausedListener(jda, requestsManager, messages),
-                new AudioResumedListener(jda, requestsManager, messages));
+                new AudioResumedListener(jda, requestsManager, messages),
+                new AudioFailedListener());
 
         audioManager.addEventListeners(audioListeners);
     }
