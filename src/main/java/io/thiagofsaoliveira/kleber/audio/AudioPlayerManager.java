@@ -3,6 +3,10 @@ package io.thiagofsaoliveira.kleber.audio;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.tools.io.HttpInterfaceManager;
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup;
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner;
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
@@ -11,10 +15,17 @@ import io.thiagofsaoliveira.kleber.spotify.AudioTrackData;
 import io.thiagofsaoliveira.kleber.spotify.SpotifyException;
 import io.thiagofsaoliveira.kleber.spotify.SpotifyManager;
 
+import java.io.UncheckedIOException;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
@@ -24,6 +35,7 @@ public class AudioPlayerManager {
 
     private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile(
             "https://open\\.spotify\\.com/(intl-[a-zA-Z]{2}/)?track/(.*)");
+    private static final String SUBNET = "::/48";
 
     private final com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager lavaplayerManager;
     private final SpotifyManager spotifyManager;
@@ -40,13 +52,39 @@ public class AudioPlayerManager {
 
     public static AudioPlayerManager newAudioPlayerManager(
             SpotifyManager spotifyManager) {
-        var manager = new DefaultAudioPlayerManager();
-        manager.registerSourceManager(new YoutubeAudioSourceManager(
+        var youtubeSource = new YoutubeAudioSourceManager(
                 true,
                 new MusicWithThumbnail(),
                 new WebWithThumbnail(),
-                new AndroidWithThumbnail()));
+                new AndroidWithThumbnail());
+        String cidr = getIpv6Address() + SUBNET;
+        var routePlanner = new RotatingIpRoutePlanner(
+                Collections.singletonList(new Ipv6Block(cidr)));
+        HttpInterfaceManager configurable =
+                youtubeSource.getHttpInterfaceManager();
+        new YoutubeIpRotatorSetup(routePlanner)
+                .forConfiguration(configurable, false)
+                .withMainDelegateFilter(null)
+                .setup();
+
+        var manager = new DefaultAudioPlayerManager();
+        manager.registerSourceManager(youtubeSource);
         return new AudioPlayerManager(manager, spotifyManager);
+    }
+
+    private static String getIpv6Address() {
+        try {
+            Optional<String> address = NetworkInterface.networkInterfaces()
+                    .flatMap(NetworkInterface::inetAddresses)
+                    .filter(Inet6Address.class::isInstance)
+                    .map(InetAddress::getHostAddress)
+                    .findFirst();
+
+            return address.orElseThrow(
+                    () -> new IllegalStateException("No ipv6 block available"));
+        } catch (SocketException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     public boolean containsAudioPlayer(long id) {
