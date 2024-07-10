@@ -52,6 +52,11 @@
             <version>${lavaplayer.version}</version>
         </dependency>
         <dependency>
+            <groupId>dev.arbjerg</groupId>
+            <artifactId>lavaplayer-ext-youtube-rotator</artifactId>
+            <version>${lavaplayer.version}</version>
+        </dependency>
+        <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>v2</artifactId>
             <version>${lavalink-youtube-v2.version}</version>
