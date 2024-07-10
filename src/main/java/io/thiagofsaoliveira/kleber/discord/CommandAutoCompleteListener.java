@@ -97,7 +97,7 @@ public class CommandAutoCompleteListener implements EventListener {
 
                         @Override
                         public void loadFailed(FriendlyException exception) {
-                            log.debug("Load failed: ", exception);
+                            log.warn("Load failed: ", exception);
                             e.replyChoices(List.of()).queue();
                         }
                     });
